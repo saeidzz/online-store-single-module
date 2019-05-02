@@ -1,0 +1,645 @@
+swagger: "2.0"
+info:
+  description: ""
+  version: "1.0.0"
+  title: "online store"
+  termsOfService: ""
+  contact:
+    email: "szxhigh@gmail.com"
+basePath: "/"
+schemes:
+- "https"
+- "http"
+paths:
+  /product:
+    post:
+      tags:
+      - "product"
+      summary: "Add a new product to the store"
+      description: ""
+      operationId: "addProduct"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "product object that needs to be added to the store"
+        required: true
+        schema:
+          $ref: '#/definitions/Product'
+      responses:
+        405:
+          description: "Invalid input"
+    put:
+      tags:
+      - "product"
+      summary: "Update an existing product"
+      description: ""
+      operationId: "updateProduct"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "product object that needs to be updated in the store"
+        required: true
+        schema:
+          $ref: '#/definitions/Product'
+      responses:
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "product not found"
+        405:
+          description: "Validation exception"
+  /product/findByTitle:
+    get:
+      tags:
+      - "product"
+      summary: "Finds Product by title"
+      description: ""
+      operationId: "findProductByTitle"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "status"
+        in: "query"
+        description: "input title should be longer than 3 chars"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/Product'
+        400:
+          description: "Invalid title value"
+  /product/findByCategory:
+    get:
+      tags:
+      - "product"
+      summary: "Finds products by tags"
+      description: "Muliple tags can be provided with comma separated strings. Use         tag1, tag2, tag3 for testing."
+      operationId: "findProductsByTags"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "tags"
+        in: "query"
+        description: "Tags to filter by"
+        required: true
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/Product'
+        400:
+          description: "Invalid tag value"
+  /product/{productId}:
+    get:
+      tags:
+      - "product"
+      summary: "Find product by ID"
+      description: "Returns a single customer"
+      operationId: "getProductById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "productId"
+        in: "path"
+        description: "ID of product to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/Product'
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "product not found"
+    delete:
+      tags:
+      - "product"
+      summary: "Deletes a product"
+      description: ""
+      operationId: "deleteProduct"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "productId"
+        in: "path"
+        description: "Product id to delete"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Product not found"
+  /product/{productId}/uploadImage:
+    post:
+      tags:
+      - "product"
+      summary: "uploads an image"
+      description: ""
+      operationId: "uploadFile"
+      consumes:
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "productId"
+        in: "path"
+        description: "ID of product to update"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "file"
+        in: "formData"
+        description: "file to upload"
+        required: false
+        type: "file"
+      responses:
+        200:
+          description: "successful operation"
+
+  /customer:
+    post:
+      tags:
+      - "customer"
+      summary: "Add a new customer to the store"
+      description: ""
+      operationId: "addCustomer"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "customer object that needs to be added to the store"
+        required: true
+        schema:
+          $ref: '#/definitions/Customer'
+      responses:
+        405:
+          description: "Invalid input"
+    put:
+      tags:
+      - "customer"
+      summary: "Update an existing customer"
+      description: ""
+      operationId: "updateCustomer"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "customer object that needs to be updated in the store"
+        required: true
+        schema:
+          $ref: '#/definitions/Customer'
+      responses:
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "customer not found"
+        405:
+          description: "Validation exception"
+  /customer/{customerId}:
+    get:
+      tags:
+      - "customer"
+      summary: "Find customer by ID"
+      description: "Returns a single customer"
+      operationId: "getCustomerById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "customerId"
+        in: "path"
+        description: "ID of customer to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/Customer'
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "customer not found"
+    delete:
+      tags:
+      - "customer"
+      summary: "Deletes a customer"
+      description: ""
+      operationId: "deleteCustomer"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "customerId"
+        in: "path"
+        description: "customer id to delete"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Product not found"
+
+  /order/:
+     get:
+      tags:
+      - "order"
+      summary: "createOrder"
+      description: "multiple shopping cartId"
+      operationId: "createOrderByShoppingCartId"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "shoppingCartId"
+        in: "query"
+        description: "shoppingCartId"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/Order'
+        400:
+          description: "Invalid status value"
+  /order/{orderId}:
+    get:
+      tags:
+      - "order"
+      summary: "Find order by ID"
+      description: "Returns a single order"
+      operationId: "getOrderById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "orderId"
+        in: "path"
+        description: "ID of order to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/Order'
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "order not found"
+    delete:
+      tags:
+      - "order"
+      summary: "Deletes a order"
+      description: ""
+      operationId: "deleteOrder"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "orderId"
+        in: "path"
+        description: "Product id to delete"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "order not found"
+
+
+  /shoppingCart/findByCustomerId:
+    get:
+      tags:
+      - "shoppingCart"
+      summary: "Finds shoppingCart by title"
+      description: ""
+      operationId: "findShoppingCartByCustomerId"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "customerId"
+        in: "query"
+        description: ""
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/ShoppingCart'
+        400:
+          description: "Invalid id value"
+  /shoppingCart/product/:
+    get:
+      tags:
+      - "shoppingCart"
+      summary: "add product to the shopping cart"
+      description: ""
+      operationId: "addProductByProductId"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "productId"
+        in: "query"
+        description: "productId "
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "shoppingCartID"
+        in: "query"
+        description: ""
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "product not found"
+    delete:
+      tags:
+      - "shoppingCart"
+      summary: "dekete product from the shopping cart"
+      description: ""
+      operationId: "deleteProductById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "productId"
+        in: "query"
+        description: "productId "
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "shoppingCartID"
+        in: "query"
+        description: ""
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "product deleted from shoppingCart successfully"
+
+
+
+definitions:
+  Address:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      addressType:
+        type: "object"
+        description: "آدرس تحویل کالا یا آدرس مشتری"
+      city:
+        type: "object"
+        description: "شهر"
+      plainAddress:
+        type: "string"
+        format: "آدرس"
+      postalCode:
+        type: "string"
+        description: "کد پستی"
+  City:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+        description: "نام شهر"
+      state:
+        type: "object"
+        description: "استان"
+  Comment:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      customer:
+        type: "object"
+        description: "مشتری"
+      product:
+        type: "object"
+        description: "محصول"
+  Customer:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+      lastName:
+        type: "string"
+      email:
+        type: "string"
+      userName:
+        type: "string"
+      phone:
+        type: "string"
+      mobileNumer:
+        type: "string"
+      birthDate:
+        type: "string"
+      wishList:
+        type: "object"
+        description: "لیست علاقه مندی"
+      shoppingCart:
+        type: "object"
+        description: "سبد خرید"
+      orders:
+        type: "object"
+        description: "لیست سفارشات"
+      shoppingAddress:
+        type: "object"
+        description: "آدرس تحویل سفارشات"
+      address:
+        type: "object"
+        description: "آدرس مشتری"
+  CustomerCheckedProducts:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      products:
+        type: "object"
+        description: "لیست محصولات"
+      customer:
+        type: "object"
+        description: "مشتری"
+  State:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+        description: "استان"
+      cities:
+        type: "object"
+        description: "لیست شهرها"
+  Product:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+        description: "نام"
+      manufacturer:
+        type: "string"
+        description: "تولید کننده"
+      Categories:
+        type: "object"
+        description: "لیست دسته های این محصول"
+      comments:
+        type: "object"
+        description: "لیست نظرات"
+      features:
+        type: "object"
+        description: "لیست ویژگی های محصول"
+      images:
+        type: "object"
+        description: "لیست عکس های محصول"
+  Category:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+        description: "نام دسته"
+      subCategories:
+        type: "object"
+        description: "زیر دسته ها"
+  ProductMap:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      feature:
+        type: "string"
+        description: "عنوان ویژگی"
+      value:
+        type: "string"
+        description: "مقدار ویژگی"
+      quantity:
+        type: "string"
+        description: "واحد ویژگی "
+  Authority:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+        description: "عنوان"
+  Order:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      products:
+        type: "object"
+        description: "محصولات سفارش داده شده"
+      payment:
+        type: "object"
+        description: "وضعیت پرداخت"
+      complete:
+        type: "boolean"
+        default: false
+  Payment:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      customer:
+        type: "object"
+        description: "مشخصات مشتری"
+      order:
+        type: "object"
+        description: "سفارش"
+      amount:
+        type: "object"
+        description: "مقدار پرداختی"
+      success:
+        type: "boolean"
+        description: "پرداخت شده"
+        default: false
+      type:
+        type: "object"
+        description: "روش پرداخت"
+  ShoppingCart:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      customer:
+        type: "object"
+        description: "مشخصات مشتری"
+      products:
+        type: "object"
+        description: "لیست محصولات"
+  WishList:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      customer:
+        type: "object"
+        description: "مشخصات مشتری"
+      products:
+        type: "object"
+        description: "لیست محصولات"
+
